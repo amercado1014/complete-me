@@ -11,8 +11,16 @@ describe('Node', () => {
  it('should be a thing', () => {
     expect(node).to.exist
   });
+
+ it('should start off without a complete word', () => {
+    expect(node.completeWord).to.eq(false);
+ });
  
  it('should be able to store child nodes', () => {
-  expect(node.children).to.deep.equal({});
+    expect(node.children).to.deep.equal({});
+ });
+
+ it('should start with a popularity of 0', () => {
+    expect(node.popularity).to.eq(0);
  });
 });

@@ -35,6 +35,18 @@ describe('Trie', () => {
     expect(trie.count).to.equal(1);
   });
 
+  it('should not increment count for duplicate words', () => {
+    expect(trie.count).to.equal(0);
+    
+    trie.insert('pizza');
+
+    expect(trie.count).to.equal(1);
+
+    trie.insert('pizza');
+
+    expect(trie.count).to.equal(1);
+  });
+
   it('should create keys in children object of first letter', () => {
     trie.insert('tacocat');
     trie.insert('pizza');
@@ -42,6 +54,19 @@ describe('Trie', () => {
 
     expect(Object.keys(trie.children)).to.deep.eq(['t','p']);
   });
+
+  it('should add word', () => {
+     trie.insert('pizza');
+     trie.insert('pizzas');
+     trie.insert('piano');
+     trie.insert('dog');
+     trie.insert('dogs');
+
+     expect(trie.children['d']).to.exit;
+     expect(trie.children['d'].children['o']).to.exit;
+     expect(trie.children['d'].children['o'].children['g']).to.exist;
+     expect(trie.children['d'].children['o'].children['g'].completeWord).to.equal('dog');
+   });
  });
 
  describe('SUGGEST', () => {
@@ -52,10 +77,6 @@ describe('Trie', () => {
      trie.insert('dog');
      trie.insert('dogs');
    });
-
-  it('should be a method, suggest', () => {
-    expect(trie.suggest('p')).to.be.a.function;
-  });
 
   it('should return an array of suggested words', () => {
    let results = trie.suggest('piz');
@@ -98,19 +119,17 @@ describe('Trie', () => {
  });
 
  describe('Select', () => {
-  it('should priortize selected words', () => {
-    let array = ['pize', 'pizza', 'pizzeria', 'pizzicato', 'pizzle']
+  it('should increase the popularity of a word each time it gets selected', () =>{
+      trie.populate(dictionary);
 
-    trie.populate(array);
+      expect(trie.children['d'].children['o'].children['g'].popularity).to.equal(0);
 
-    expect(trie.suggest('piz')).to.deep.eq(['pize', 'pizza', 'pizzeria', 'pizzicato', 'pizzle']);
+      trie.select('dog');
 
-    trie.select('pizzeria');
+      expect(trie.children['d'].children['o'].children['g'].popularity).to.equal(1);
+    });
 
-    expect(trie.suggest('piz')).to.deep.eq(['pizzeria','pize', 'pizza', 'pizzicato', 'pizzle'])
-  });
-
-  it('should priortize selected words', () => {
+  it('should priortize selected words from dictionary', () => {
     trie.populate(dictionary);
 
     expect(trie.suggest('piz')).to.deep.eq(['pize', 'pizza', 'pizzeria', 'pizzicato', 'pizzle']);
@@ -132,7 +151,16 @@ describe('Trie', () => {
 
 
     expect(trie.suggest('piz')).to.deep.eq(['pize', 'pizza', 'pizzicato', 'pizzle'])    
+  });
 
+   it('should be able to remove word from count once deleted ', () => {    
+    trie.insert('pizza');
+
+    expect(trie.count).to.equal(1);
+
+    trie.delete('pizza');
+
+    expect(trie.count).to.equal(0);
   });
  });
 
