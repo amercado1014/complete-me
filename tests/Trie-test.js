@@ -45,7 +45,6 @@ describe('Trie', () => {
  });
 
  describe('SUGGEST', () => {
-  
    beforeEach(() => {
      trie.insert('pizza');
      trie.insert('pizzas');
@@ -69,8 +68,6 @@ describe('Trie', () => {
    expect(check2).to.be.true;
    expect(check3).to.be.false;
    expect(check4).to.be.false;
-     // console.log(check4);
-     // console.log(JSON.stringify(trie, null, 4))
    });
   
   it('should suggest words form dictionary', () => {
@@ -87,7 +84,7 @@ describe('Trie', () => {
     expect(trie.count).to.equal(0);
 
     trie.populate(array);
-    // console.log(JSON.stringify(trie, null, 4))
+
     expect(trie.count).to.equal(4);
   });
 
@@ -109,7 +106,6 @@ describe('Trie', () => {
     expect(trie.suggest('piz')).to.deep.eq(['pize', 'pizza', 'pizzeria', 'pizzicato', 'pizzle']);
 
     trie.select('pizzeria');
-    // console.log(JSON.stringify(trie, null, 4))
 
     expect(trie.suggest('piz')).to.deep.eq(['pizzeria','pize', 'pizza', 'pizzicato', 'pizzle'])
   });
